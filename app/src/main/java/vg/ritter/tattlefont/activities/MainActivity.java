@@ -55,38 +55,6 @@ public class MainActivity extends AppCompatActivity {
         weirdFontLogger = new WeirdFontLogger();
         fonts = new HashSet<>();
         new LoadFontsTask(maxProgress).execute();
-
-        submitButton = findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SubmissionStatus.class);
-                intent.putExtra("errors", weirdFontLogger);
-                intent.putExtra("fonts", (Serializable) fonts);
-                startActivity(intent);
-            }
-        });
-
-        Configuration config = getResources().getConfiguration();
-        String currentLocale = config.locale.toString();
-        String currentLanguage = "< API 24";
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            // Use LocaleList.getDefault() on API 24 and higher
-            currentLanguage = config.getLocales().get(0).toString();
-            LocaleList supportedLocales = LocaleList.getDefault();
-
-            // Iterate through and print each supported locale
-            for (int i = 0; i < supportedLocales.size(); i++) {
-                Locale locale = supportedLocales.get(i);
-                Log.d("SupportedLanguages", "Supported Language: " + locale.toString());
-            }
-        }
-        Log.d("CurrentLocale", "Current Locale: " + currentLocale);
-        Log.d("CurrentLanguage", "Current Language: " + currentLanguage);
-
-
-
     }
 
     private class LoadFontsTask extends AsyncTask<Void, Integer, Set<FontDetails>> {
@@ -142,9 +110,10 @@ public class MainActivity extends AppCompatActivity {
             // Add the sorted fontList to the adapter
             adapter.addAll(fontList);
 
-            submitButton.setVisibility(View.VISIBLE);
-            resultsText.setText(String.format("Processed %s of %s fonts successfully, reduced to %s unique fonts.", (maxProgress - weirdFontLogger.Size()), maxProgress, fontSet.size()));
-            progressBar.setVisibility(ProgressBar.INVISIBLE); // Hide the progress bar when maximum is reached
+            Intent intent = new Intent(MainActivity.this, SubmissionStatus.class);
+            intent.putExtra("errors", weirdFontLogger);
+            intent.putExtra("fonts", (Serializable) fonts);
+            startActivity(intent);
         }
     }
 
