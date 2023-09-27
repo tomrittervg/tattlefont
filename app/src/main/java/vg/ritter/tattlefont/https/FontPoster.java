@@ -35,6 +35,11 @@ public class FontPoster extends AbstractPoster<String> {
         File f = new File(FilePath);
         String destination = hostname + "/font";
         try {
+            if(!f.exists()) {
+                throw new FileNotFoundException(f.getAbsolutePath() + " does not exist");
+            } else if(f.isDirectory()) {
+                throw new FileNotFoundException(f.getAbsolutePath() + " is a directory");
+            }
             URL url = new URL(destination);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -87,7 +92,7 @@ public class FontPoster extends AbstractPoster<String> {
             return serverResponse;
         } catch (Exception e) {
             e.printStackTrace();
-            return "Encountered a local error, please screenshot and tell Tom:\n" + e.toString();
+            return e.getMessage();
         }
     }
 }

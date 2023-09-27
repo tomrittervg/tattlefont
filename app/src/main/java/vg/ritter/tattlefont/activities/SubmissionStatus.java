@@ -48,9 +48,9 @@ public class SubmissionStatus extends Activity {
             WeirdFontLogger weirdFontLogger = (WeirdFontLogger) getIntent().getSerializableExtra("errors");
 
             if(fonts == null) {
-                processResult("Received a null 'fonts' object in Submissionstatus.");
+                processResult("Received a null 'fonts' object in Submissionstatus.", true);
             } else if(weirdFontLogger == null) {
-                processResult("Received a null 'weirdFontLogger' object in Submissionstatus.");
+                processResult("Received a null 'weirdFontLogger' object in Submissionstatus.", true);
             }
 
             ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(this, android.R.style.Widget_ProgressBar_Horizontal);
@@ -63,7 +63,7 @@ public class SubmissionStatus extends Activity {
                 fontPosters.add(new FontPoster(this, new OnPostExecuteCallback<String>() {
                     @Override
                     public void onPostExecute(String result) {
-                        processResult(result);
+                        processResult(result, false);
                     }
                 }, progressBar, error));
             }
@@ -71,7 +71,7 @@ public class SubmissionStatus extends Activity {
             QueryPoster queryPoster = new QueryPoster(this, new OnPostExecuteCallback<Pair<String, List<String>>>() {
                 @Override
                 public void onPostExecute(Pair < String, List < String >> pairResult) {
-                    processResult(pairResult.a);
+                    processResult(pairResult.a, true);
                     List<String> neededFonts = pairResult.b;
 
                     // Schedule al the font posts
@@ -89,7 +89,7 @@ public class SubmissionStatus extends Activity {
                         SubmissionPoster submissionPoster = new SubmissionPoster(SubmissionStatus.this, new OnPostExecuteCallback<String>() {
                             @Override
                             public void onPostExecute(String result) {
-                                processResult(result);
+                                processResult(result, true);
                             }
                         }, submissionProgressBar, submission);
                         submissionPoster.execute();
@@ -105,13 +105,19 @@ public class SubmissionStatus extends Activity {
             throw new RuntimeException(e);
         }
     }
-
-    private void processResult(String result) {
+    private final StringBuilder results = new StringBuilder();
+    private void processResult(String result, Boolean fireIntent) {
         if(result != null && result.length() > 0) {
-            Intent intent = new Intent(this, ResponseScreen.class);
-            intent.putExtra("message", result);
-            startActivity(intent);
-            finish();
+            if (fireIntent) {
+                Intent intent = new Intent(this, ResponseScreen.class);
+                intent.putExtra("message", this.results.toString() + "\n" + result);
+                startActivity(intent);
+                finish();
+            } else {
+                this.results.append("Got a minor(?) error: ");
+                this.results.append(result);
+                this.results.append("\n");
+            }
         }
     }
 }
