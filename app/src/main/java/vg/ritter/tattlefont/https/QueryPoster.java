@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import vg.ritter.tattlefont.FontDetails;
+import vg.ritter.tattlefont.Utility;
 import vg.ritter.tattlefont.WeirdFontLogger;
 import vg.ritter.tattlefont.utility.OnPostExecuteCallback;
 import vg.ritter.tattlefont.utility.Pair;
@@ -44,8 +45,8 @@ public class QueryPoster extends AbstractPoster<Pair<String, List<String>>> {
             JSONArray jsonArray = new JSONArray();
 
             // Calculate the hash for each file and add it to the JSON array
-            for (Pair<String, String> font : fontErrors) {
-                jsonArray.put(font.b);
+            for (Pair<String, Exception> font : fontErrors) {
+                jsonArray.put(Utility.CalculateFileHash(font.a));
             }
 
             // Create a JSON object to hold the JSON array

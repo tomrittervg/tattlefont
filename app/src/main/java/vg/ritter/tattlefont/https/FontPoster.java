@@ -18,16 +18,19 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
+import vg.ritter.tattlefont.Utility;
 import vg.ritter.tattlefont.utility.OnPostExecuteCallback;
 import vg.ritter.tattlefont.utility.Pair;
 
 public class FontPoster extends AbstractPoster<String> {
     String FilePath;
     public String FileHash;
-    public FontPoster(Context context, OnPostExecuteCallback postExecute, ProgressBar progressBar, Pair<String, String> error) throws NoSuchAlgorithmException, KeyManagementException {
+    public Exception exception;
+    public FontPoster(Context context, OnPostExecuteCallback postExecute, ProgressBar progressBar, Pair<String, Exception> error) throws Exception {
         super(context, postExecute, progressBar);
         this.FilePath = error.a;
-        this.FileHash = error.b;
+        this.FileHash = Utility.CalculateFileHash(this.FilePath);
+        this.exception = error.b;
     }
 
     @Override

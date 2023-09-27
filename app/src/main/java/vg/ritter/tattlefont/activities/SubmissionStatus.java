@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,18 +55,20 @@ public class SubmissionStatus extends Activity {
             }
 
             ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(this, android.R.style.Widget_ProgressBar_Horizontal);
-            for (Pair<String, String> error : weirdFontLogger) {
+            for (Pair<String, Exception> error : weirdFontLogger) {
                 ProgressBar progressBar = new ProgressBar(contextThemeWrapper, null, android.R.attr.progressBarStyleHorizontal);
                 progressBar.setMax(100);
                 progressBar.setProgress(0);
                 fontProgressBarList.addView(progressBar);
 
-                fontPosters.add(new FontPoster(this, new OnPostExecuteCallback<String>() {
-                    @Override
-                    public void onPostExecute(String result) {
-                        processResult(result, false);
-                    }
-                }, progressBar, error));
+                if(error.b.getClass() != FileNotFoundException.class) {
+                    fontPosters.add(new FontPoster(this, new OnPostExecuteCallback<String>() {
+                        @Override
+                        public void onPostExecute(String result) {
+                            processResult(result, false);
+                        }
+                    }, progressBar, error));
+                }
             }
 
             QueryPoster queryPoster = new QueryPoster(this, new OnPostExecuteCallback<Pair<String, List<String>>>() {

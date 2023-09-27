@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -18,8 +19,8 @@ import java.util.NoSuchElementException;
 
 import vg.ritter.tattlefont.utility.Pair;
 
-public class WeirdFontLogger implements Iterable<Pair<String, String>>, Serializable {
-    List<Pair<String, String>> weirdFonts;
+public class WeirdFontLogger implements Iterable<Pair<String, Exception>>, Serializable {
+    List<Pair<String, Exception>> weirdFonts;
 
     public WeirdFontLogger() {
         weirdFonts = new ArrayList<>();
@@ -28,23 +29,23 @@ public class WeirdFontLogger implements Iterable<Pair<String, String>>, Serializ
     public int Size() {
         return this.weirdFonts.size();
     }
-    void Add(String path, Exception e) throws NoSuchAlgorithmException {
-        String hash = calculateFileHash(path);
-        for(Pair<String, String> pair : this.weirdFonts) {
-            if(pair.b.equals(hash)) {
+    void Add(String path, Exception e) throws Exception {
+        String hash = Utility.CalculateFileHash(path);
+        for(Pair<String, Exception> pair : this.weirdFonts) {
+            if(pair.a.equals(path)) {
                 // We already know about this file.
                 return;
             }
         }
-        weirdFonts.add(new Pair<String, String>(path, hash));
+        weirdFonts.add(new Pair<String, Exception>(path, e));
     }
 
     @Override
-    public Iterator<Pair<String, String>> iterator() {
+    public Iterator<Pair<String, Exception>> iterator() {
         return new FontIterator();
     }
 
-    private class FontIterator implements Iterator<Pair<String, String>>, Serializable {
+    private class FontIterator implements Iterator<Pair<String, Exception>>, Serializable {
         private int currentIndex = 0;
 
         @Override
@@ -53,20 +54,24 @@ public class WeirdFontLogger implements Iterable<Pair<String, String>>, Serializ
         }
 
         @Override
-        public Pair<String, String> next() {
+        public Pair<String, Exception> next() {
             if (hasNext()) {
                 return weirdFonts.get(currentIndex++);
             }
             throw new NoSuchElementException();
         }
     }
-    public JSONArray toJson() throws JSONException {
+    public JSONArray toJson() throws Exception {
         JSONArray jsonArray = new JSONArray();
 
-        for (Pair<String, String> error : weirdFonts) {
+        for (Pair<String, Exception> error : weirdFonts) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("path", error.a);
-            jsonObject.put("hash", error.b);
+            if (FileNotFoundException.class != error.b.getClass()) {
+                jsonObject.put("hash", Utility.CalculateFileHash(error.a));
+            }else {
+                jsonObject.put("hash", "file-not-found");
+            }
             jsonArray.put(jsonObject);
         }
 

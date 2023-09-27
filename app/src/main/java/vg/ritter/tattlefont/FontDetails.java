@@ -34,7 +34,7 @@ public class FontDetails implements Serializable {
     FontDetails(String src, String path) throws Exception {
         this.Source = src;
         this.Path = path;
-        this.Hash = calculateFileHash(this.Path);
+        this.Hash = Utility.CalculateFileHash(this.Path);
         ReadFontFile();
     }
 
@@ -210,26 +210,4 @@ public class FontDetails implements Serializable {
         }
         return jsonObject;
     }
-    private String calculateFileHash(String filePath) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        FileInputStream fis = new FileInputStream(filePath);
-
-        byte[] buffer = new byte[8192];
-        int bytesRead;
-
-        while ((bytesRead = fis.read(buffer)) != -1) {
-            md.update(buffer, 0, bytesRead);
-        }
-
-        byte[] digest = md.digest();
-
-        // Convert the byte array to a hexadecimal string
-        StringBuilder hashBuilder = new StringBuilder();
-        for (byte b : digest) {
-            hashBuilder.append(String.format("%02X", b));
-        }
-
-        fis.close();
-
-        return hashBuilder.toString();
-    }}
+    }

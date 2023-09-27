@@ -24,7 +24,7 @@ import vg.ritter.tattlefont.utility.UUIDManager;
 public class JSONSubmission {
     JSONObject submission;
 
-    public JSONSubmission(Context context, WeirdFontLogger weirdFontLogger, HashSet<FontDetails> fonts) throws JSONException {
+    public JSONSubmission(Context context, WeirdFontLogger weirdFontLogger, HashSet<FontDetails> fonts) throws Exception {
         this.submission = JSONSubmission.GetObject(context);
         this.submission.put("brand", Build.BRAND);
         this.submission.put("device", Build.DEVICE);

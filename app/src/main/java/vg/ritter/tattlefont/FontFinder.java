@@ -17,7 +17,7 @@ public class FontFinder {
     }
 
 
-    static List<FontDetails> ReadAllFonts(WeirdFontLogger weirdFontLogger) throws NoSuchAlgorithmException, IOException {
+    static List<FontDetails> ReadAllFonts(WeirdFontLogger weirdFontLogger) throws Exception {
         Set<FontDetails> fonts = new HashSet<>();
 
         for(String path : GetSystemFonts()) {
@@ -32,7 +32,7 @@ public class FontFinder {
         return fontList;
     }
 
-    public static FontDetails ReadFont(String src, String path, WeirdFontLogger weirdFontLogger) throws NoSuchAlgorithmException, IOException {
+    public static FontDetails ReadFont(String src, String path, WeirdFontLogger weirdFontLogger) throws Exception {
         FontDetails f;
         try {
             return new FontDetails(src, path);
