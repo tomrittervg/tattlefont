@@ -8,37 +8,7 @@
         android:id="@+id/resultsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submitting Results"
+        android:text="Compressing Results"
         android:textAlignment="center"/>
-
-    <!-- Progress bar for QueryPoster -->
-    <ProgressBar
-        android:id="@+id/queryProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
-
-    <!-- List view for FontPoster progress bars -->
-    <LinearLayout
-        android:id="@+id/fontProgressBarList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/queryProgressBar"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical" />
-
-    <!-- Progress bar for SubmissionPoster -->
-    <ProgressBar
-        android:id="@+id/submissionProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_below="@+id/fontProgressBarList"
-        android:layout_marginTop="20dp" />
-
-
 
 </RelativeLayout>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.LocaleList;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -12,14 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-
-import vg.ritter.tattlefont.utility.NameManager;
-import vg.ritter.tattlefont.utility.UUIDManager;
 
 public class JSONSubmission {
     JSONObject submission;
@@ -70,8 +63,6 @@ public class JSONSubmission {
 
     public static JSONObject GetObject(Context context) throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("uuid", UUIDManager.getUUID(context));
-        obj.put("name", NameManager.getSavedName(context));
         return obj;
     }
 
